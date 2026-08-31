@@ -17,10 +17,10 @@ if `env_keep` is enabled, then you can create a shared library that will be load
 2. Add password hash and username to `/etc/passwd`.
 3. su [USERNAME].
 
-## PATH
+# PATH
 **Idea:** A root-owned SUID binary calls a command by name (not full path). You control PATH, so you make it run your binary instead — with root privileges.
 
-## Steps
+# Steps
 
 1. **Find SUID binaries**
    ```
@@ -64,6 +64,25 @@ if `env_keep` is enabled, then you can create a shared library that will be load
    id
    ```
 
-## Notes
+# Notes
 - Only works if the binary uses `system()`/`popen()` with a bare command name.
 - Won't work if the binary hardcodes its own PATH internally.
+
+## Capabilities 
+`getcap -r / 2>/dev/null` - lists enabled capabilities.  
+- look for cap_setuid+ep that allows a binary to change its user ID to any user when executed.
+GTFOBins or AI can help in writing exploits for binary.
+
+## Cron
+cron jobs can be found in:  
+- /etc/crontab
+- /etc/cron.d/
+- /etc/cron.hourly (or daily, weekly, monthly)
+- /var/spool/cron/crontabs/
+
+After finding the cron script. We can modify it to launch a reverse shell with root privileges.  
+`nc -nlvp [port number]` - on attack machine to receive shell.  
+
+# Another method for Cron
+Adding `echo "root:newpass" | chpasswd` into the vulnerable script.  
+login as the root by calling `su root` and using new password.  
